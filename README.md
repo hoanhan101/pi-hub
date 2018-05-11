@@ -1,12 +1,11 @@
 # pi-hub
 
-PiHub is a central management system that stores temperature and humidity sensors reading 
-and displays visualization.
+PiHub is a central management system that stores temperature and humidity sensors reading.
 
 ## Project status
 
-It is an on-going project. Here is the link to our design document: [Design
-Doc](https://docs.google.com/document/d/1w93jYpGjRjTiokhEnTv7tspONa8558e2vc17fk6wqV0/edit?usp=sharing)
+It is an on-going project. Here is the link to our [design document
+](https://docs.google.com/document/d/1w93jYpGjRjTiokhEnTv7tspONa8558e2vc17fk6wqV0/edit?usp=sharing).
 
 ## Usage
 

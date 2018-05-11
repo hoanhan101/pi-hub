@@ -1,5 +1,5 @@
 """
-    sample.py - Sample code using Publisher to push sensor workshop
+    sample.py - Sample code using Publisher to push sensor readings to the hub.
     Author: Hoanh An (hoanhan@bennington.edu)
     Date: 05/10/2018
 """
