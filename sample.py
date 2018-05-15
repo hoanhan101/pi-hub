@@ -26,4 +26,4 @@ if __name__ == '__main__':
     worker = Publisher()
 
     print(worker.get('test'))
-    print(worker.publish('test', sample_data))
+    print(worker.publish('write', sample_data))
