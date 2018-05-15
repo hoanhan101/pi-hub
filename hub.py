@@ -5,9 +5,11 @@
 """
 
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from time import time, ctime
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
