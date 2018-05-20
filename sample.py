@@ -13,11 +13,11 @@ if __name__ == '__main__':
         'id': 101,
         'data': {
             'temperature': {
-                'value': 25,
+                'value': 25.0,
                 'unit': 'C'
             },
             'humidity': {
-                'value': 60,
+                'value': 60.0,
                 'unit': '%'
             }
         }
