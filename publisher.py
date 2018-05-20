@@ -44,7 +44,42 @@ class Publisher():
             payload <str>: Data payload
 
         Return:
-            Response data <dict>, status_code <int>
+            Response data <dict>, status_code <int> if succeed. None and 0 if fail.
         """
+        # Validate POST data
+        if payload.get('id') is None:
+            print('There is no id field')
+            return None, 0
+
+        if payload.get('data') is None:
+            print('There is no data field')
+            return None, 0
+
+        data = payload.get('data')
+
+        if data.get('temperature') is None:
+            print('There is no temperature field')
+            return None, 0
+
+        if data.get('humidity') is None:
+            print('There is no humidity field')
+            return None, 0
+
+        if not isinstance(data.get('temperature').get('value'), float):
+            print('Temperature value must be float')
+            return None, 0
+    
+        if not isinstance(data.get('temperature').get('unit'), str):
+            print('Temperature unit must be string')
+            return None, 0
+
+        if not isinstance(data.get('humidity').get('value'), float):
+            print('Humidity value must be float')
+            return None, 0
+
+        if not isinstance(data.get('humidity').get('unit'), str):
+            print('Humidity unit must be string')
+            return None, 0
+
         r = requests.post('{}/{}'.format(self.host, endpoint), json=payload)
         return r.json(), r.status_code
