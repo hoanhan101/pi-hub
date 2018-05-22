@@ -58,5 +58,7 @@ Configure in [config.py](config.py). Configurable options are:
 - SENSOR_ID: My unique sensor id in integer.
 - FREQUENCY: Time in seconds between each send.
 
-Adapt the template and instruction in [sample_client.py](sample_client.py) 
-in your main program to send data.
+Adapt the template and code in [sample_client.py](sample_client.py) 
+to your main program.
+
+After these steps above successfully, you should be able to send data to the server.
