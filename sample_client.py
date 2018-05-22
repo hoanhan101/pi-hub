@@ -1,5 +1,5 @@
 """
-    sample_client.py - Sample client code to push sensor readings to the hub.
+    sample_client.py - Sample client code to send sensor readings to the collection server.
     Author: Hoanh An (hoanhan@bennington.edu)
     Date: 05/10/2018
 """
