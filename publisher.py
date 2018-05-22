@@ -7,10 +7,12 @@
 import json
 import requests
 
-from config import url
+from pprint import pprint
+
+from config import URL
 
 class Publisher():
-    def __init__(self, host=url):
+    def __init__(self, host=URL):
         """
         Initialize a Publisher object.
 
@@ -33,9 +35,13 @@ class Publisher():
             Response data <dict>, status_code <int>
         """
         r = requests.get('{}/{}'.format(self.host, endpoint))
+
+        print('=> Successfully GET:')
+        pprint(r.json())
+
         return r.json(), r.status_code
 
-    def publish(self, endpoint, payload):
+    def publish(self, payload, endpoint='write'):
         """
         Publish sensors reading to a specific endpoint.
 
@@ -82,4 +88,8 @@ class Publisher():
             return None, 0
 
         r = requests.post('{}/{}'.format(self.host, endpoint), json=payload)
+
+        print('=> Successfully POST. GET back:')
+        pprint(r.json())
+
         return r.json(), r.status_code
