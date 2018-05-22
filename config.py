@@ -4,4 +4,12 @@
     Date: 05/10/2018
 """
 
-url  = 'http://127.0.0.1:5000'
+# Test URL
+URL = 'http://localhost:5000'
+# URL = 'http://34.201.69.120:5000'
+
+# Sensor ID
+SENSOR_ID = 101
+
+# Time in second between each send.
+FREQUENCY = 5
