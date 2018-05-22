@@ -5,8 +5,7 @@
 """
 
 # Test URL
-URL = 'http://localhost:5000'
-# URL = 'http://34.201.69.120:5000'
+URL = 'http://localhost:5000' # Default is localhost. Demo's is 'http://34.201.69.120:5000'
 
 # Sensor ID
 SENSOR_ID = 101
