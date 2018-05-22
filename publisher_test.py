@@ -13,23 +13,23 @@ if __name__ == '__main__':
     assert 200 == worker.get('test')[1]
 
     empty_dict = {}
-    assert 0 == worker.publish('test', empty_dict)[1]
+    assert 0 == worker.publish(empty_dict)[1]
 
     no_id = {
         'data': 'test'
     }
-    assert 0 == worker.publish('test', no_id)[1]
+    assert 0 == worker.publish(no_id)[1]
 
     no_data = {
         'id': 1
     }
-    assert 0 == worker.publish('test', no_data)[1]
+    assert 0 == worker.publish(no_data)[1]
 
     empty_data = {
         'id': 1,
         'data': {}
     }
-    assert 0 == worker.publish('test', empty_data)[1]
+    assert 0 == worker.publish(empty_data)[1]
 
     no_temp = {
         'id': 1,
@@ -40,7 +40,7 @@ if __name__ == '__main__':
             }
         }
     }
-    assert 0 == worker.publish('test', no_temp)[1]
+    assert 0 == worker.publish(no_temp)[1]
 
     no_humd = {
         'id': 1,
@@ -51,7 +51,7 @@ if __name__ == '__main__':
             }
         }
     }
-    assert 0 == worker.publish('test', no_humd)[1]
+    assert 0 == worker.publish(no_humd)[1]
 
     non_float_temp_value = {
         'id': 1,
@@ -66,7 +66,7 @@ if __name__ == '__main__':
             }
         }
     }
-    assert 0 == worker.publish('test', non_float_temp_value)[1]
+    assert 0 == worker.publish(non_float_temp_value)[1]
 
     non_float_humd_value = {
         'id': 1,
@@ -81,7 +81,7 @@ if __name__ == '__main__':
             }
         }
     }
-    assert 0 == worker.publish('test', non_float_humd_value)[1]
+    assert 0 == worker.publish(non_float_humd_value)[1]
 
     non_str_temp_unit = {
         'id': 1,
@@ -96,7 +96,7 @@ if __name__ == '__main__':
             }
         }
     }
-    assert 0 == worker.publish('test', non_str_temp_unit)[1]
+    assert 0 == worker.publish(non_str_temp_unit)[1]
 
     non_str_humd_unit = {
         'id': 1,
@@ -111,7 +111,7 @@ if __name__ == '__main__':
             }
         }
     }
-    assert 0 == worker.publish('test', non_str_humd_unit)[1]
+    assert 0 == worker.publish(non_str_humd_unit)[1]
 
     good_payload = {
         'id': 1,
@@ -126,4 +126,4 @@ if __name__ == '__main__':
             }
         }
     }
-    assert 200 == worker.publish('test', good_payload)[1]
+    assert 200 == worker.publish(good_payload)[1]
