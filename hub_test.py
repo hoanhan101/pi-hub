@@ -6,12 +6,15 @@
 
 import requests
 
+from pprint import pprint
+
 import config
 import helper
 
 def test_get(endpoint, url=config.URL):
     r = requests.get('{}/{}'.format(url, endpoint))
     print('/{}\t{}'.format(endpoint, r.status_code))
+    # pprint(r.json())
 
 if __name__ == '__main__':
     # GET

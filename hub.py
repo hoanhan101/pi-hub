@@ -16,20 +16,6 @@ import sql
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/test', methods=['GET', 'POST'])
-def test():
-    """
-    Test endpoint.
-    """
-    return jsonify(dummy_data.dummy_test)
-
-@app.route('/config', methods=['GET'])
-def config():
-    """
-    Return configurations.
-    """
-    return jsonify(dummy_data.dummy_config)
-
 @app.route('/scan', methods=['GET'])
 def scan():
     """
@@ -78,19 +64,21 @@ def read_sensor_id_yesterday(sensor_id):
     response = helper.use_reading_schema(sql.get_readings_yesterday_by_id(sensor_id))
     return jsonify(response)
 
-@app.route('/read/max', methods=['GET'])
-def read_max():
-    """
-    Return maximum reading of all readings. 
-    """
-    return jsonify(dummy_data.dummy_read_max)
-
 @app.route('/read/yesterday/max', methods=['GET'])
 def read_yesterday_max():
     """
     Return maximum reading of all readings from yesterday.
     """
-    return jsonify(dummy_data.dummy_read_max)
+    response = helper.use_reading_schema(sql.get_max_reading_yesterday())
+    return jsonify(response)
+
+@app.route('/read/last_hour/max', methods=['GET'])
+def read_last_hour_max():
+    """
+    Return maximum reading of all readings in the last hour.
+    """
+    response = helper.use_reading_schema(sql.get_max_reading_last_hour())
+    return jsonify(response)
 
 @app.route('/write', methods=['POST'])
 def write():
@@ -131,6 +119,26 @@ def write():
         pprint(response)
         return jsonify(response)
 
+@app.route('/test', methods=['GET', 'POST'])
+def test():
+    """
+    Test endpoint.
+    """
+    return jsonify(dummy_data.dummy_test)
+
+@app.route('/config', methods=['GET'])
+def config():
+    """
+    Return configurations.
+    """
+    return jsonify(dummy_data.dummy_config)
+
+@app.route('/read/max', methods=['GET'])
+def read_max():
+    """
+    Return maximum reading of all readings. 
+    """
+    return jsonify(dummy_data.dummy_read_max)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
