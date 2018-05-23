@@ -28,19 +28,6 @@ database = "sensor_workshop"
 # Due to some weird error with PDO, parameters will not be passed through placeholders at times.
 
 # Worth mentioning: SELECT statements return the full row and not just one column. Can edit if needed.
-def test_connection():
-	from mysql.connector import errorcode
-	try:
-		cnx = mysql.connector.connect(host, user, psswd, database)
-	except mysql.connector.Error as err:
-  		if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-			print("Something is wrong with your user name or password")
-		elif err.errno == errorcode.ER_BAD_DB_ERROR:
-			print("Database does not exist")
-		else:
-			print(err)
-	else:
-		cnx.close()
 
 
 
@@ -127,7 +114,7 @@ def get_readings_last_hour_by_id(id):
 def get_max_reading_yesterday():
     link = connect()
     cursor = link.cursor()
-    q = "SELECT sensor_id,MAX(temp),temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE DATEDIFF(CURDATE(), DATE(timestamp))=1 AND sensor_id="+id
+    q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE DATEDIFF(CURDATE(), DATE(timestamp))=1 AND temp=(SELECT MAX(temp) from readings)"
     cursor.execute(q)
     info = cursor.fetchall()
     link.close()
@@ -138,7 +125,7 @@ def get_max_reading_yesterday():
 def get_max_reading_last_hour():
     link = connect()
     cursor = link.cursor()
-    q = "SELECT sensor_id,MAX(temp),temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE TIME_TO_SEC(TIMEDIFF(NOW(), timestamp)) BETWEEN 0 AND 3600"
+    q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE (TIME_TO_SEC(TIMEDIFF(NOW(), timestamp)) BETWEEN 0 AND 3600) AND temp=(SELECT MAX(temp) FROM readings)"
     cursor.execute(q)
     info = cursor.fetchall()
     link.close()
@@ -148,7 +135,7 @@ def get_max_reading_last_hour():
 def clear_table():
     link = connect()
     cursor = link.cursor()
-    q = "TRUNCATE readings IGNORE DELETE TRIGGERS DROP STORAGE"
+    q = "TRUNCATE readings"
     cursor.execute(q)
     link.close()
 
