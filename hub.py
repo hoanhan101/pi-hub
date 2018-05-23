@@ -6,6 +6,7 @@
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from pprint import pprint
 
 from dummy_data import *
 from helper import *
@@ -33,14 +34,15 @@ def scan():
     """
     Return all sensors with their locations.
     """
-    return jsonify(dummy_scan)
+    response = use_scan_schema(get_sensor_and_location())
+    return jsonify(response)
 
 @app.route('/read/last_hour', methods=['GET'])
 def read_last_hour():
     """
     Return all readings in the last hour.
     """
-    response = use_schema(get_readings_last_hour())
+    response = use_reading_schema(get_readings_last_hour())
     return jsonify(response)
 
 @app.route('/read/yesterday', methods=['GET'])
@@ -48,7 +50,7 @@ def read_yesterday():
     """
     Return all readings from yesterday.
     """
-    response = use_schema(get_readings_yesterday())
+    response = use_reading_schema(get_readings_yesterday())
     return jsonify(response)
 
 @app.route('/read/<int:sensor_id>', methods=['GET'])
@@ -56,7 +58,7 @@ def read_sensor_id(sensor_id):
     """
     Return all readings for a specific sensor id.
     """
-    response = use_schema(get_readings_from_sensor(sensor_id))
+    response = use_reading_schema(get_readings_from_sensor(sensor_id))
     return jsonify(response)
 
 @app.route('/read/<int:sensor_id>/last_hour', methods=['GET'])
@@ -64,7 +66,7 @@ def read_sensor_id_last_hour(sensor_id):
     """
     Return all readings for a specific sensor id in the last hour.
     """
-    response = use_schema(get_readings_last_hour_by_id(sensor_id))
+    response = use_reading_schema(get_readings_last_hour_by_id(sensor_id))
     return jsonify(response)
 
 @app.route('/read/<int:sensor_id>/yesterday', methods=['GET'])
@@ -72,7 +74,7 @@ def read_sensor_id_yesterday(sensor_id):
     """
     Return all readings for a specific sensor id from yesterday.
     """
-    response = use_schema(get_readings_yesterday_by_id(sensor_id))
+    response = use_reading_schema(get_readings_yesterday_by_id(sensor_id))
     return jsonify(response)
 
 @app.route('/read/max', methods=['GET'])
@@ -94,13 +96,34 @@ def write():
     """
     Write to database endpoint.
     """
-    # Return back what the client POST with timestamp and status.
-    response = {
-        'timestamp': ctime(time()),
-        'status': 'ok',
-        'data': request.get_json()
-    }
-    return jsonify(response)
+    # Get request data
+    payload = request.get_json()
+
+    try:
+        insert_reading(payload.get('id'),
+                       payload.get('location'),
+                       payload.get('data').get('temperature').get('value'),
+                       payload.get('data').get('temperature').get('unit'),
+                       payload.get('data').get('humidity').get('value'))
+
+        # Return back what the client POST with timestamp and status.
+        response = {
+            'timestamp': ctime(time()),
+            'error': 'nil',
+        }
+
+        pprint(response)
+        return jsonify(response)
+
+    except Exception as e:
+        # Return back what the client POST with timestamp and status.
+        response = {
+            'timestamp': ctime(time()),
+            'error': e,
+        }
+
+        pprint(response)
+        return jsonify(response)
 
 
 if __name__ == '__main__':
