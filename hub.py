@@ -8,6 +8,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 from dummy_data import *
+from sql_functions import *
 
 app = Flask(__name__)
 CORS(app)
@@ -38,7 +39,30 @@ def read_last_hour():
     """
     Return all readings in the last hour.
     """
-    return jsonify(dummy_read)
+    # Get raw data from database read.
+    raw_data = get_readings_last_hour()
+
+    # Prepare a list of reponse object
+    response = []
+    for item in raw_data:
+        scheme = {
+            'id': item[0],
+            'timestamp': item[4],
+            'data': {
+                'temperature': {
+                    'value': item[1],
+                    'unit': item[2]
+                },
+                'humidity': {
+                    'value': item[3],
+                    'unit': '%'
+                }
+            }
+        }
+
+        response.append(scheme)
+
+    return jsonify(response)
 
 @app.route('/read/yesterday', methods=['GET'])
 def read_yesterday():
@@ -100,4 +124,4 @@ def write():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
