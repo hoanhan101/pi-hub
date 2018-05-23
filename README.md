@@ -53,13 +53,8 @@ Clone the project and install dependencies:
 git clone https://github.com/hoanhan101/pi-hub.git && cd pi-hub && ./install_requirements.sh
 ```
 
-Configure in [config.py](config.py). Configurable options are:
-- **URL:** Target URL to send data to. Default is local host, port 5000. Demo day will be
-  `http://34.201.69.120:5000`
-- **SENSOR ID:** My unique sensor id in integer.
-- **FREQUENCY:** Time in seconds between each send.
+Configure the URL in [config.py](config.py) to `TBA`
 
-Adapt the template and code in [sample_client.py](sample_client.py) 
-to your main program.
+Adapt the template and code in [sample_client.py](sample_client.py) to your main program.
 
 After following these steps above successfully, you should be able to send data to the server.
