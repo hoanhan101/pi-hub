@@ -6,8 +6,7 @@
 
 import time
 
-from config import SENSOR_ID, FREQUENCY
-from publisher import Publisher
+from helper import post
 
 def get_sample_reading():
     """
@@ -26,31 +25,16 @@ def get_sample_reading():
     return sample_temperature, sample_humidity
 
 if __name__ == '__main__':
-    # Initialize our Publisher object to publish data to the hub.
-    worker = Publisher()
+    # Configurations
+    SENSOR_ID = 1
+    LOCATION = 2
+    SLEEP_TIME = 5
 
     # Loop forever.
     while True:
         # Get sensor reading <Use your get_reading function here>
         sample_temperature, sample_humidity = get_sample_reading()
 
-        # Sample POST data.
-        sample_data = {
-            'id': SENSOR_ID,
-            'data': {
-                'temperature': {
-                    'value': sample_temperature,
-                    'unit': 'C'
-                },
-                'humidity': {
-                    'value': sample_humidity,
-                    'unit': '%'
-                }
-            }
-        }
+        post(SENSOR_ID, LOCATION, sample_temperature, sample_humidity)
 
-        # Publish reading data to the hub using publish method.
-        worker.publish(sample_data)
-
-        # Sleep for a while before executing the next send.
-        time.sleep(FREQUENCY)
+        time.sleep(SLEEP_TIME)
