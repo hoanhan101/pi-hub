@@ -9,45 +9,86 @@ import mysql.connector
 import datetime
 import json
 
-#set variables. note that the host can change if the ip adress the mysql container runs in changes.
-host = "localhost"
-user = "root"
-psswd = "sensorworkshop"
-database = "sensor_workshop"
-
-# following email, will do:
-#- get all temperature readings in the last hour
-#- get all temperature readings in yesterday
-#- get all temperature readings from sensor x
-#- get temperature readings from sensor x in the last hour
-#- get temperature readings from sensor x in yesterday
-
-# Worth mentioning: SELECT statements return the full row and not just one column. Can edit if needed.
-
-from mysql.connector import errorcode
-try:
-  cnx = mysql.connector.connect(host, user, psswd, database)
-except mysql.connector.Error as err:
-  if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-    print("Something is wrong with your user name or password")
-  elif err.errno == errorcode.ER_BAD_DB_ERROR:
-    print("Database does not exist")
-  else:
-    print(err)
-else:
-  cnx.close()
+# Configurations
+host = 'localhost'
+user = 'root'
+psswd = ''
+database = 'sensor_workshop'
 
 def connect():
-    link = mysql.connector.connect(user=user, password=psswd, host=host, database=database)
+    """
+    Connect to database.
+
+    Params:
+        None
+
+    Return:
+        A connection link.
+    """
+    link = mysql.connector.connect(host=host, user=user, password=psswd, database=database)
     return link
 
 def insert_reading(id, loc, temp, d, hum):
+    """
+    Insert sensor reading to the table.
+
+    Params:
+        id <int>: Sensor ID
+        loc <int>: Sensor's location
+        temp <float>: Temperature value
+        d <str>: Temperature degree
+        hum <float>: Temperature value
+
+    Return:
+        None
+    """
     link = connect()
     cursor = link.cursor()
     q = "INSERT INTO readings (sensor_id, location, temp, temp_degree, humidity, timestamp) VALUES (%s, %s, %s, %s, %s, NOW())"
     cursor.execute(q, (id, loc, temp, d, hum))
 
+def clean_up_table():
+    """
+    Quick way to clean up the table
+
+    Params:
+        None
+
+    Return:
+        None
+    """
+    link = connect()
+    cursor = link.cursor()
+    q = "TRUNCATE TABLE readings;"
+    cursor.execute(q)
+
+def get_all_readings():
+    """
+    Get all readings from the table.
+
+    Params:
+        None
+
+    Return:
+        Data in list.
+    """
+    link = connect()
+    cursor = link.cursor()
+    q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings"
+    cursor.execute(q)
+    info = cursor.fetchall()
+    return info
+
 def get_readings_from_sensor(id):
+    """
+    Get all readings for a specific sensor.
+
+    Params:
+        id <int>: Sensor ID
+
+    Return:
+        Data in list.
+    """
     link = connect()
     cursor = link.cursor()
     q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE sensor_id="+str(id)
@@ -56,6 +97,15 @@ def get_readings_from_sensor(id):
     return info
 
 def get_readings_yesterday():
+    """
+    Get all readings from yesterday
+
+    Params:
+        None
+
+    Return:
+        Data in list.
+    """
     link = connect()
     cursor = link.cursor()
     q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE DATEDIFF(CURDATE(), DATE(timestamp))=1"
@@ -64,6 +114,15 @@ def get_readings_yesterday():
     return info
 
 def get_readings_last_hour():
+    """
+    Get all readings from the last hour.
+
+    Params:
+        None
+
+    Return:
+        Data in list.
+    """
     link = connect()
     cursor = link.cursor()
     q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE TIME_TO_SEC(TIMEDIFF(NOW(), timestamp)) BETWEEN 0 AND 3600"
