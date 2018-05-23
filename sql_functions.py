@@ -48,7 +48,6 @@ def insert_reading(id, loc, temp, d, hum):
     cursor.execute(q, (id, loc, temp, d, hum))
     link.close()
 
-
 def get_all_readings():
     """
     Get all readings from the table.
@@ -62,24 +61,6 @@ def get_all_readings():
     link = connect()
     cursor = link.cursor()
     q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings"
-    cursor.execute(q)
-    info = cursor.fetchall()
-    link.close()
-    return info
-
-def get_readings_from_sensor(id):
-    """
-    Get all readings for a specific sensor.
-
-    Params:
-        id <int>: Sensor ID
-
-    Return:
-        Data in list.
-    """
-    link = connect()
-    cursor = link.cursor()
-    q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE sensor_id="+str(id)
     cursor.execute(q)
     info = cursor.fetchall()
     link.close()
@@ -121,6 +102,24 @@ def get_readings_last_hour():
     link.close()
     return info
 
+def get_readings_from_sensor(id):
+    """
+    Get all readings for a specific sensor.
+
+    Params:
+        id <int>: Sensor ID
+
+    Return:
+        Data in list.
+    """
+    link = connect()
+    cursor = link.cursor()
+    q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE sensor_id="+str(id)
+    cursor.execute(q)
+    info = cursor.fetchall()
+    link.close()
+    return info
+
 def get_readings_yesterday_by_id(id):
     """
     Get all readings from yesterday for a specific sensor.
@@ -133,7 +132,7 @@ def get_readings_yesterday_by_id(id):
     """
     link = connect()
     cursor = link.cursor()
-    q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE DATEDIFF(CURDATE(), DATE(timestamp))=1 AND sensor_id="+id
+    q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE DATEDIFF(CURDATE(), DATE(timestamp))=1 AND sensor_id="+str(id)
     cursor.execute(q)
     info = cursor.fetchall()
     link.close()
@@ -151,7 +150,7 @@ def get_readings_last_hour_by_id(id):
     """
     link = connect()
     cursor = link.cursor()
-    q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE (TIME_TO_SEC(TIMEDIFF(NOW(), timestamp)) BETWEEN 0 AND 3600) AND sensor_id="+id
+    q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE (TIME_TO_SEC(TIMEDIFF(NOW(), timestamp)) BETWEEN 0 AND 3600) AND sensor_id="+str(id)
     cursor.execute(q)
     info = cursor.fetchall()
     link.close()
@@ -169,7 +168,7 @@ def get_max_reading_yesterday():
     """
     link = connect()
     cursor = link.cursor()
-    q = "SELECT sensor_id,MAX(temp),temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE DATEDIFF(CURDATE(), DATE(timestamp))=1 AND sensor_id="+id
+    q = "SELECT sensor_id,MAX(temp),temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE DATEDIFF(CURDATE(), DATE(timestamp))=1"
     cursor.execute(q)
     info = cursor.fetchall()
     link.close()
@@ -205,7 +204,7 @@ def clear_table():
     """
     link = connect()
     cursor = link.cursor()
-    q = "TRUNCATE readings IGNORE DELETE TRIGGERS DROP STORAGE"
+    q = "TRUNCATE TABLE readings;"
     cursor.execute(q)
     link.close()
 
