@@ -53,6 +53,8 @@ Clone the project and install dependencies:
 git clone https://github.com/hoanhan101/pi-hub.git && cd pi-hub && ./install_requirements.sh
 ```
 
+Copy your program file into this folder.
+
 Configure the URL in [config.py](config.py) to `TBA`
 
 Adapt the template and code in [sample_client.py](sample_client.py) to your main program.
