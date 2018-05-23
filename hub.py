@@ -8,6 +8,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 from dummy_data import *
+from helper import *
 from sql_functions import *
 
 app = Flask(__name__)
@@ -39,29 +40,7 @@ def read_last_hour():
     """
     Return all readings in the last hour.
     """
-    # Get raw data from database read.
-    raw_data = get_readings_last_hour()
-
-    # Prepare a list of reponse object
-    response = []
-    for item in raw_data:
-        scheme = {
-            'id': item[0],
-            'timestamp': item[4],
-            'data': {
-                'temperature': {
-                    'value': item[1],
-                    'unit': item[2]
-                },
-                'humidity': {
-                    'value': item[3],
-                    'unit': '%'
-                }
-            }
-        }
-
-        response.append(scheme)
-
+    response = use_schema(get_readings_last_hour())
     return jsonify(response)
 
 @app.route('/read/yesterday', methods=['GET'])
@@ -69,31 +48,32 @@ def read_yesterday():
     """
     Return all readings from yesterday.
     """
-    return jsonify(dummy_read)
+    response = use_schema(get_readings_yesterday())
+    return jsonify(response)
 
 @app.route('/read/<int:sensor_id>', methods=['GET'])
 def read_sensor_id(sensor_id):
     """
     Return all readings for a specific sensor id.
     """
-    dummy_sensor_read['id'] = sensor_id
-    return jsonify(dummy_sensor_read)
+    response = use_schema(get_readings_from_sensor(sensor_id))
+    return jsonify(response)
 
 @app.route('/read/<int:sensor_id>/last_hour', methods=['GET'])
 def read_sensor_id_last_hour(sensor_id):
     """
     Return all readings for a specific sensor id in the last hour.
     """
-    dummy_sensor_read['id'] = sensor_id
-    return jsonify(dummy_sensor_read)
+    response = use_schema(get_readings_last_hour_by_id(sensor_id))
+    return jsonify(response)
 
 @app.route('/read/<int:sensor_id>/yesterday', methods=['GET'])
 def read_sensor_id_yesterday(sensor_id):
     """
     Return all readings for a specific sensor id from yesterday.
     """
-    dummy_sensor_read['id'] = sensor_id
-    return jsonify(dummy_sensor_read)
+    response = use_schema(get_readings_yesterday_by_id(sensor_id))
+    return jsonify(response)
 
 @app.route('/read/max', methods=['GET'])
 def read_max():
