@@ -7,10 +7,11 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from pprint import pprint
+from time import ctime, time
 
-from dummy_data import *
-from helper import *
-from sql_functions import *
+import dummy_data
+import helper
+import sql
 
 app = Flask(__name__)
 CORS(app)
@@ -20,21 +21,21 @@ def test():
     """
     Test endpoint.
     """
-    return jsonify(dummy_test)
+    return jsonify(dummy_data.dummy_test)
 
 @app.route('/config', methods=['GET'])
 def config():
     """
     Return configurations.
     """
-    return jsonify(dummy_config)
+    return jsonify(dummy_data.dummy_config)
 
 @app.route('/scan', methods=['GET'])
 def scan():
     """
     Return all sensors with their locations.
     """
-    response = use_scan_schema(get_sensor_and_location())
+    response = helper.use_scan_schema(sql.get_sensor_and_location())
     return jsonify(response)
 
 @app.route('/read/last_hour', methods=['GET'])
@@ -42,7 +43,7 @@ def read_last_hour():
     """
     Return all readings in the last hour.
     """
-    response = use_reading_schema(get_readings_last_hour())
+    response = helper.use_reading_schema(sql.get_readings_last_hour())
     return jsonify(response)
 
 @app.route('/read/yesterday', methods=['GET'])
@@ -50,7 +51,7 @@ def read_yesterday():
     """
     Return all readings from yesterday.
     """
-    response = use_reading_schema(get_readings_yesterday())
+    response = helper.use_reading_schema(sql.get_readings_yesterday())
     return jsonify(response)
 
 @app.route('/read/<int:sensor_id>', methods=['GET'])
@@ -58,7 +59,7 @@ def read_sensor_id(sensor_id):
     """
     Return all readings for a specific sensor id.
     """
-    response = use_reading_schema(get_readings_from_sensor(sensor_id))
+    response = helper.use_reading_schema(sql.get_readings_from_sensor(sensor_id))
     return jsonify(response)
 
 @app.route('/read/<int:sensor_id>/last_hour', methods=['GET'])
@@ -66,7 +67,7 @@ def read_sensor_id_last_hour(sensor_id):
     """
     Return all readings for a specific sensor id in the last hour.
     """
-    response = use_reading_schema(get_readings_last_hour_by_id(sensor_id))
+    response = helper.use_reading_schema(sql.get_readings_last_hour_by_id(sensor_id))
     return jsonify(response)
 
 @app.route('/read/<int:sensor_id>/yesterday', methods=['GET'])
@@ -74,7 +75,7 @@ def read_sensor_id_yesterday(sensor_id):
     """
     Return all readings for a specific sensor id from yesterday.
     """
-    response = use_reading_schema(get_readings_yesterday_by_id(sensor_id))
+    response = helper.use_reading_schema(sql.get_readings_yesterday_by_id(sensor_id))
     return jsonify(response)
 
 @app.route('/read/max', methods=['GET'])
@@ -82,14 +83,14 @@ def read_max():
     """
     Return maximum reading of all readings. 
     """
-    return jsonify(dummy_read_max)
+    return jsonify(dummy_data.dummy_read_max)
 
 @app.route('/read/yesterday/max', methods=['GET'])
 def read_yesterday_max():
     """
     Return maximum reading of all readings from yesterday.
     """
-    return jsonify(dummy_read_max)
+    return jsonify(dummy_data.dummy_read_max)
 
 @app.route('/write', methods=['POST'])
 def write():
@@ -99,27 +100,32 @@ def write():
     # Get request data
     payload = request.get_json()
 
-    try:
-        insert_reading(payload.get('id'),
-                       payload.get('location'),
-                       payload.get('data').get('temperature').get('value'),
-                       payload.get('data').get('temperature').get('unit'),
-                       payload.get('data').get('humidity').get('value'))
+    # Validate POST data
+    flag = helper.validate_post_data(payload)
+
+    if flag is None:
+        sql.insert_reading(payload.get('id'),
+                           payload.get('location'),
+                           payload.get('data').get('temperature').get('value'),
+                           payload.get('data').get('temperature').get('unit'),
+                           payload.get('data').get('humidity').get('value'))
 
         # Return back what the client POST with timestamp and status.
         response = {
+            'id': payload.get('id'),
             'timestamp': ctime(time()),
-            'error': 'nil',
+            'error': None
         }
 
         pprint(response)
         return jsonify(response)
 
-    except Exception as e:
+    else:
         # Return back what the client POST with timestamp and status.
         response = {
+            'id': payload.get('id'),
             'timestamp': ctime(time()),
-            'error': e,
+            'error': flag
         }
 
         pprint(response)
