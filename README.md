@@ -19,7 +19,7 @@ document](https://docs.google.com/document/d/1w93jYpGjRjTiokhEnTv7tspONa8558e2vc
 **Quick way**
 
 ```
-docker run -p 5000:5000 -ti hoanhan/pi-hub
+docker run -p 5000:5000 -dit --restart unless-stopped hoanhan/pi-hub
 ```
 
 **Build and run**
