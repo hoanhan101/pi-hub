@@ -46,21 +46,8 @@ def insert_reading(id, loc, temp, d, hum):
     cursor = link.cursor()
     q = "INSERT INTO readings (sensor_id, location, temp, temp_degree, humidity, timestamp) VALUES (%s, %s, %s, %s, %s, NOW())"
     cursor.execute(q, (id, loc, temp, d, hum))
+    link.close()
 
-def clean_up_table():
-    """
-    Quick way to clean up the table
-
-    Params:
-        None
-
-    Return:
-        None
-    """
-    link = connect()
-    cursor = link.cursor()
-    q = "TRUNCATE TABLE readings;"
-    cursor.execute(q)
 
 def get_all_readings():
     """
@@ -77,6 +64,7 @@ def get_all_readings():
     q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings"
     cursor.execute(q)
     info = cursor.fetchall()
+    link.close()
     return info
 
 def get_readings_from_sensor(id):
@@ -94,6 +82,7 @@ def get_readings_from_sensor(id):
     q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE sensor_id="+str(id)
     cursor.execute(q)
     info = cursor.fetchall()
+    link.close()
     return info
 
 def get_readings_yesterday():
@@ -111,6 +100,7 @@ def get_readings_yesterday():
     q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE DATEDIFF(CURDATE(), DATE(timestamp))=1"
     cursor.execute(q)
     info = cursor.fetchall()
+    link.close()
     return info
 
 def get_readings_last_hour():
@@ -128,4 +118,111 @@ def get_readings_last_hour():
     q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE TIME_TO_SEC(TIMEDIFF(NOW(), timestamp)) BETWEEN 0 AND 3600"
     cursor.execute(q)
     info = cursor.fetchall()
+    link.close()
+    return info
+
+def get_readings_yesterday_by_id(id):
+    """
+    Get all readings from yesterday for a specific sensor.
+
+    Params:
+        id <int>: Sensor ID
+
+    Return:
+        Data in list.
+    """
+    link = connect()
+    cursor = link.cursor()
+    q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE DATEDIFF(CURDATE(), DATE(timestamp))=1 AND sensor_id="+id
+    cursor.execute(q)
+    info = cursor.fetchall()
+    link.close()
+    return info
+
+def get_readings_last_hour_by_id(id):
+    """
+    Get all readings in the last hour for a specific sensor.
+
+    Params:
+        id <int>: Sensor ID
+
+    Return:
+        Data in list.
+    """
+    link = connect()
+    cursor = link.cursor()
+    q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE (TIME_TO_SEC(TIMEDIFF(NOW(), timestamp)) BETWEEN 0 AND 3600) AND sensor_id="+id
+    cursor.execute(q)
+    info = cursor.fetchall()
+    link.close()
+    return info
+
+def get_max_reading_yesterday():
+    """
+    Get maximum reading from yesterday.
+
+    Params:
+        None
+
+    Return:
+        Data in list.
+    """
+    link = connect()
+    cursor = link.cursor()
+    q = "SELECT sensor_id,MAX(temp),temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE DATEDIFF(CURDATE(), DATE(timestamp))=1 AND sensor_id="+id
+    cursor.execute(q)
+    info = cursor.fetchall()
+    link.close()
+    return info
+
+def get_max_reading_last_hour():
+    """
+    Get maximum reading in the last hour.
+
+    Params:
+        None
+
+    Return:
+        Data in list.
+    """
+    link = connect()
+    cursor = link.cursor()
+    q = "SELECT sensor_id,MAX(temp),temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE TIME_TO_SEC(TIMEDIFF(NOW(), timestamp)) BETWEEN 0 AND 3600"
+    cursor.execute(q)
+    info = cursor.fetchall()
+    link.close()
+    return info
+
+def clear_table():
+    """
+    Quick way to clean up the table
+
+    Params:
+        None
+
+    Return:
+        None
+    """
+    link = connect()
+    cursor = link.cursor()
+    q = "TRUNCATE readings IGNORE DELETE TRIGGERS DROP STORAGE"
+    cursor.execute(q)
+    link.close()
+
+def get_sensor_and_location():
+    """
+    Get all sensors with their locations.
+
+    Params:
+        None
+
+    Return:
+        Data in list.
+    """
+    link = connect()
+    cursor = link.cursor()
+    q = "SELECT DISTINCT sensor_id, location FROM readings ORDER BY location"
+    cursor.execute(q)
+    info = cursor.fetchall()
+    link.close()
     return info
