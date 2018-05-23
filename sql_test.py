@@ -7,7 +7,7 @@
 import random
 from pprint import pprint
 
-from sql_functions import *
+from sql import *
 
 # Create a bunch of dummy data
 # for i in range(0, 30):

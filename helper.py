@@ -115,11 +115,11 @@ def post(sensor_id, location, temp, humd):
         'location': location,
         'data': {
             'temperature': {
-                'value': float(temp),
+                'value': temp,
                 'unit': 'C'
             },
             'humidity': {
-                'value': float(humd),
+                'value': humd,
                 'unit': '%'
             }
         }
@@ -130,3 +130,37 @@ def post(sensor_id, location, temp, humd):
 
     # Print out returned message.
     pprint(r.json())
+
+def validate_post_data(data):
+    """
+    Validate POST data.
+
+    Params:
+        data <dict>: POST data
+
+    Return:
+        None if data is valid. Otherwise, error message in string format.
+    """
+
+    id = data.get('id')
+    location = data.get('location')
+    temp = data.get('data').get('temperature').get('value')
+    temp_unit = data.get('data').get('temperature').get('unit')
+    humd = data.get('data').get('humidity').get('value')
+
+    if not isinstance(id, int):
+        return 'ID must be an integer'
+
+    if not isinstance(location, int):
+        return 'Location must be an integer'
+
+    if not isinstance(temp, float):
+        return 'Temperature value must be a float'
+
+    if not isinstance(humd, float):
+        return 'Humidity value must be a float'
+
+    if not isinstance(temp_unit, str):
+        return 'Temperature unit must be a string'
+
+    return None

@@ -6,7 +6,7 @@
 
 import time
 
-from helper import post
+import helper
 
 def get_sample_reading():
     """
@@ -21,12 +21,12 @@ def get_sample_reading():
         A tuple of temperature and humidity value in float.
     """
     sample_temperature = 20.2
-    sample_humidity    = 60.6
+    sample_humidity    = 60.1
     return sample_temperature, sample_humidity
 
 if __name__ == '__main__':
     # Configurations
-    SENSOR_ID = 1
+    SENSOR_ID = 5
     LOCATION = 2
     SLEEP_TIME = 5
 
@@ -35,6 +35,6 @@ if __name__ == '__main__':
         # Get sensor reading <Use your get_reading function here>
         sample_temperature, sample_humidity = get_sample_reading()
 
-        post(SENSOR_ID, LOCATION, sample_temperature, sample_humidity)
+        helper.post(SENSOR_ID, LOCATION, sample_temperature, sample_humidity)
 
         time.sleep(SLEEP_TIME)
