@@ -168,7 +168,7 @@ def get_max_reading_yesterday():
     """
     link = connect()
     cursor = link.cursor()
-    q = "SELECT sensor_id,MAX(temp),temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE DATEDIFF(CURDATE(), DATE(timestamp))=1"
+    q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE DATEDIFF(CURDATE(), DATE(timestamp))=1 AND temp=(SELECT MAX(temp) from readings)"
     cursor.execute(q)
     info = cursor.fetchall()
     link.close()
@@ -186,7 +186,7 @@ def get_max_reading_last_hour():
     """
     link = connect()
     cursor = link.cursor()
-    q = "SELECT sensor_id,MAX(temp),temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE TIME_TO_SEC(TIMEDIFF(NOW(), timestamp)) BETWEEN 0 AND 3600"
+    q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE (TIME_TO_SEC(TIMEDIFF(NOW(), timestamp)) BETWEEN 0 AND 3600) AND temp=(SELECT MAX(temp) FROM readings)"
     cursor.execute(q)
     info = cursor.fetchall()
     link.close()
