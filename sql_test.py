@@ -24,7 +24,7 @@ from sql_functions import *
 
 
 # Avaiable functions
-print(get_readings_last_hour())
+# print(get_readings_last_hour())
 # print(get_readings_yesterday())
 # print(get_readings_from_sensor(1))
 # print(get_readings_from_sensor(2))
@@ -32,4 +32,4 @@ print(get_readings_last_hour())
 # print(get_readings_last_hour_by_id(1))
 # print(get_max_reading_yesterday())
 # print(get_max_reading_last_hour())
-# print(get_sensor_and_location())
+print(get_sensor_and_location())
