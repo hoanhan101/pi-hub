@@ -4,9 +4,51 @@
     Date: 05/23/18
 """
 
-def use_schema(data):
+import json
+import requests
+
+from pprint import pprint
+
+from config import URL
+
+
+def use_scan_schema(data):
     """
-    Convert data to the a custom schema.
+    Convert data to a custom scan schema.
+    The output will have this format:
+        {
+            'sensors': [
+                {
+                    'id': <int>,
+                    'location': <int>
+                }
+                ...
+            ]
+        }
+
+    Params:
+        data <list>: List of database object.
+
+    Return:
+        Data in dictionary format.
+    """
+    result = {}
+    sensors = []
+
+    for item in data:
+        scheme = {
+            'id': item[0],
+            'location': item[1]
+        }
+
+        sensors.append(scheme)
+
+    result['sensors'] = sensors
+    return result
+
+def use_reading_schema(data):
+    """
+    Convert data to a custom reading schema.
     The output will have this format:
         [
             {
@@ -53,3 +95,38 @@ def use_schema(data):
         result.append(scheme)
 
     return result
+
+def post(sensor_id, location, temp, humd):
+    """
+    Publish a sensor reading to the server.
+
+    Params:
+        sensor_id <int>: Sensor ID
+        location <int>: Location number
+        temp <float>: Temperature value
+        humd <float>: Humidity value
+
+    Return:
+        None
+    """
+    # Construct a payload
+    payload = {
+        'id': sensor_id,
+        'location': location,
+        'data': {
+            'temperature': {
+                'value': float(temp),
+                'unit': 'C'
+            },
+            'humidity': {
+                'value': float(humd),
+                'unit': '%'
+            }
+        }
+    }
+    
+    # Send a request
+    r = requests.post('{}/{}'.format(URL, 'write'), json=payload)
+
+    # Print out returned message.
+    pprint(r.json())
