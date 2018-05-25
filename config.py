@@ -4,10 +4,9 @@
     Date: 05/10/2018
 """
 
-# URL
-URL = 'http://localhost:5000'
-#     'http://34.201.69.120:5000'
-#     'http://54.172.51.227:5000'
+# URL = 'http://localhost:5000'
+# URL = 'http://34.201.69.120:5000'
+URL = 'http://54.172.51.227:5000'
 
 # MySQL
 HOST = 'mysql1' # for Docker

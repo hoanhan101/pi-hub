@@ -154,6 +154,24 @@ def get_readings_last_hour_by_id(id):
     link.close()
     return info
 
+def get_max_reading():
+    """
+    Get all time maximum reading.
+
+    Params:
+        None
+
+    Return:
+        Data in list.
+    """
+    link = connect()
+    cursor = link.cursor()
+    q = "SELECT sensor_id,temp,temp_degree,humidity, CAST(timestamp AS CHAR(30)) FROM readings WHERE temp=(SELECT MAX(temp) from readings)"
+    cursor.execute(q)
+    info = cursor.fetchall()
+    link.close()
+    return info
+
 def get_max_reading_yesterday():
     """
     Get maximum reading from yesterday.

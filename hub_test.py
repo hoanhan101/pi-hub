@@ -14,7 +14,7 @@ import helper
 def test_get(endpoint, url=config.URL):
     r = requests.get('{}/{}'.format(url, endpoint))
     print('/{}\t{}'.format(endpoint, r.status_code))
-    # pprint(r.json())
+    pprint(r.json())
 
 if __name__ == '__main__':
     # GET
@@ -30,4 +30,4 @@ if __name__ == '__main__':
     test_get('read/yesterday/max')
 
     # POST
-    helper.post(1, 2, 20.2, 60.6)
+    # helper.post(1, 2, 20.2, 60.6)

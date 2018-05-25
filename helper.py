@@ -8,13 +8,54 @@ import json
 import requests
 
 from pprint import pprint
+from time import time, ctime
 
 from config import URL
 
 
-def use_scan_schema(data):
+def use_test_scheme():
     """
-    Convert data to a custom scan schema.
+    Use test scheme.
+
+    Params:
+        None
+
+    Return:
+        None
+    """
+    payload = {
+        'status': 'ok',
+        'timestamp': ctime(time())
+    }
+    return payload
+
+def use_config_scheme():
+    """
+    Convert configurations data to a custom scheme.
+
+    Params:
+        None
+
+    Return:
+        None
+    """
+    payload = {
+        'url': config.URL,
+        'mysql': {
+            'host': config.HOST,
+            'port': config.PORT,
+            'user': config.USER,
+            'password': config.PASSWORD,
+            'database': config.DATABASE
+        },
+        'debug': True, # TODO
+        'pretty_json': True # TODO
+    }
+    return payload
+
+def use_scan_scheme(data):
+    """
+    Convert data to a custom scan scheme.
     The output will have this format:
         {
             'sensors': [
@@ -46,9 +87,9 @@ def use_scan_schema(data):
     result['sensors'] = sensors
     return result
 
-def use_reading_schema(data):
+def use_reading_scheme(data):
     """
-    Convert data to a custom reading schema.
+    Convert data to a custom reading scheme.
     The output will have this format:
         [
             {
