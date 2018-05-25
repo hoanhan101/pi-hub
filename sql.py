@@ -1,5 +1,5 @@
 """
-    sql_functions.py - SQL functions
+    sql.py - SQL functions
     Based on sql/functions.py written by Paulina Valdivieso (paulinavaldivieso@bennington.edu)
     Author: Hoanh An (hoanhan@bennington.edu)
     Date: 05/22/18
@@ -9,13 +9,8 @@ import mysql.connector
 import datetime
 import json
 
-# Configurations
-# host = 'localhost'
-host = 'mysql1' # for docker
-port = 3306
-user = 'root'
-psswd = ''
-database = 'sensor_workshop'
+import config
+
 
 def connect():
     """
@@ -27,7 +22,8 @@ def connect():
     Return:
         A connection link.
     """
-    link = mysql.connector.connect(host=host, port=port, user=user, password=psswd, database=database)
+    link = mysql.connector.connect(host=config.HOST, port=config.PORT, user=config.USER,
+                                   password=config.PASSWORD, database=config.DATABASE)
     return link
 
 def insert_reading(id, loc, temp, d, hum):

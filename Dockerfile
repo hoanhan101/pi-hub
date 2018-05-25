@@ -18,4 +18,4 @@ RUN ./install_requirements.sh
 EXPOSE 5000
 
 ENV FLASK_APP=hub.py
-CMD /usr/local/bin/flask run --host=0.0.0.0
+CMD ./start.sh 
