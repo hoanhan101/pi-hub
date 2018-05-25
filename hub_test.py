@@ -12,22 +12,35 @@ import config
 import helper
 
 def test_get(endpoint, url=config.URL):
+    """
+    Test GET endpoint.
+
+    Params:
+        endpoint <str>: Endpoint
+        url <str>: Target URL
+
+    Return:
+        None
+    """
     r = requests.get('{}/{}'.format(url, endpoint))
-    print('/{}\t{}'.format(endpoint, r.status_code))
-    pprint(r.json())
+    return r.status_code
 
 if __name__ == '__main__':
     # GET
-    test_get('test')
-    test_get('config')
-    test_get('scan')
-    test_get('read/last_hour')
-    test_get('read/yesterday')
-    test_get('read/1')
-    test_get('read/1/last_hour')
-    test_get('read/1/yesterday')
-    test_get('read/max')
-    test_get('read/yesterday/max')
+    assert 200 == test_get('test')
+    assert 200 == test_get('config')
+    assert 200 == test_get('scan')
+    assert 200 == test_get('read/max')
+    assert 200 == test_get('read/last_hour')
+    assert 200 == test_get('read/last_hour/max')
+    assert 200 == test_get('read/yesterday')
+    assert 200 == test_get('read/yesterday/max')
+    assert 200 == test_get('read/1')
+    assert 200 == test_get('read/1/last_hour')
+    assert 200 == test_get('read/1/yesterday')
 
     # POST
-    # helper.post(1, 2, 20.2, 60.6)
+    assert 200 == helper.post(1, 2, 20.2, 60.6)
+
+    # Clean up
+    assert 200 == test_get('clean')
