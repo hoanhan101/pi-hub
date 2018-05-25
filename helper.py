@@ -10,8 +10,7 @@ import requests
 from pprint import pprint
 from time import time, ctime
 
-from config import URL
-
+import config
 
 def use_test_scheme():
     """
@@ -167,7 +166,7 @@ def post(sensor_id, location, temp, humd):
     }
     
     # Send a request
-    r = requests.post('{}/{}'.format(URL, 'write'), json=payload)
+    r = requests.post('{}/{}'.format(config.URL, 'write'), json=payload)
 
     # Print out returned message.
     pprint(r.json())
