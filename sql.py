@@ -10,7 +10,9 @@ import datetime
 import json
 
 # Configurations
-host = 'localhost'
+# host = 'localhost'
+host = 'mysql1' # for docker
+port = 3306
 user = 'root'
 psswd = ''
 database = 'sensor_workshop'
@@ -25,7 +27,7 @@ def connect():
     Return:
         A connection link.
     """
-    link = mysql.connector.connect(host=host, user=user, password=psswd, database=database)
+    link = mysql.connector.connect(host=host, port=port, user=user, password=psswd, database=database)
     return link
 
 def insert_reading(id, loc, temp, d, hum):
