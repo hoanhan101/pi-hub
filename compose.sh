@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# compose.sh - Link mysql-server container to pi0hub container.
-# Author: Hoanh An (hoanhan@bennington)
+# compose.sh - Link mysql-server container to pi-hub container.
+# Author: Hoanh An (hoanhan@bennington.edu)
 # Data: 05/25/18
 # Note: A better way would be using docker compose. However, this allows more freedom.
 
