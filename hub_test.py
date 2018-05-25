@@ -23,6 +23,8 @@ def test_get(endpoint, url=config.URL):
         None
     """
     r = requests.get('{}/{}'.format(url, endpoint))
+    print('\033[92m/{}\t{}\033[0m'.format(endpoint, r.status_code))
+    pprint(r.json())
     return r.status_code
 
 if __name__ == '__main__':
@@ -30,6 +32,7 @@ if __name__ == '__main__':
     assert 200 == test_get('test')
     assert 200 == test_get('config')
     assert 200 == test_get('scan')
+    assert 200 == test_get('read/all')
     assert 200 == test_get('read/max')
     assert 200 == test_get('read/last_hour')
     assert 200 == test_get('read/last_hour/max')
@@ -44,3 +47,4 @@ if __name__ == '__main__':
 
     # Clean up
     assert 200 == test_get('clean')
+    assert 200 == test_get('read/all')

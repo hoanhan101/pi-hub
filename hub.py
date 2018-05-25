@@ -39,6 +39,14 @@ def scan():
     response = helper.use_scan_scheme(sql.get_sensor_and_location())
     return jsonify(response)
 
+@app.route('/read/all', methods=['GET'])
+def read_all():
+    """
+    Return all readings. 
+    """
+    response = helper.use_reading_scheme(sql.get_all_readings())
+    return jsonify(response)
+
 @app.route('/read/max', methods=['GET'])
 def read_max():
     """
