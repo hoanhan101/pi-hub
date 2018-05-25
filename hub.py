@@ -142,5 +142,15 @@ def write():
         pprint(response)
         return jsonify(response)
 
+@app.route('/clean', methods=['GET'])
+def clean_up_database():
+    """
+    Clean up database. For testing only.
+    """
+    sql.clear_table()
+    response = helper.use_test_scheme()
+    return jsonify(response)
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

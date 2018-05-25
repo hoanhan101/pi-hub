@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# compose.sh - Link mysql-server container to pi0hub container.
+# Author: Hoanh An (hoanhan@bennington)
+# Data: 05/25/18
+# Note: A better way would be using docker compose. However, this allows more freedom.
 
 echo "Run mysql-server"
 docker run --name=mysql1 -e MYSQL_ALLOW_EMPTY_PASSWORD=true -e MYSQL_ROOT_HOST=172.17.0.3 -d mysql/mysql-server:latest

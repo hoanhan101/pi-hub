@@ -147,7 +147,7 @@ def post(sensor_id, location, temp, humd):
         humd <float>: Humidity value
 
     Return:
-        None
+        Status code
     """
     # Construct a payload
     payload = {
@@ -170,6 +170,8 @@ def post(sensor_id, location, temp, humd):
 
     # Print out returned message.
     pprint(r.json())
+
+    return r.status_code
 
 def validate_post_data(data):
     """
