@@ -31,7 +31,8 @@ def create_database(cursor):
         exit(1)
 
 if __name__ == '__main__':
-    cnx = mysql.connector.connect(user=config.USER, password=config.PASSWORD)
+    cnx = mysql.connector.connect(host=config.HOST, port=config.PORT,
+                                  user=config.USER, password=config.PASSWORD)
     cursor = cnx.cursor()
 
     try:
