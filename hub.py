@@ -5,6 +5,8 @@
 """
 
 from flask import Flask, jsonify, request
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask_cors import CORS
 from pprint import pprint
 from time import ctime, time
@@ -13,6 +15,11 @@ import helper
 import sql
 
 app = Flask(__name__)
+limiter = Limiter(
+        app,
+        key_func=get_remote_address,
+        default_limits=["10/minute"]
+)
 CORS(app)
 
 @app.route('/test', methods=['GET', 'POST'])

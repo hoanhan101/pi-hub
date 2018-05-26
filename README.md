@@ -164,6 +164,7 @@ LOCATION = 2
 
 # Define how much time do you want to wait between each send to the server.
 # Any value from 15 to 30 seconds is good enough. Below will be too much overhead for the server.
+# You don't want to hurt the server, do you?
 SLEEP_TIME = 15
 
 # Loop forever.
