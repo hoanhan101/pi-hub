@@ -17,12 +17,12 @@ The project is complete. API is documented. Docker is available.
 ## Getting Started
 
 **Build and run Docker containers**
-```
+```sh
 ./compose.sh
 ```
 
 **Verify with `curl`**
-```
+```sh
 curl http://localhost:5000/test
 ```
 
@@ -51,23 +51,23 @@ Filename | Description
 
 Method | Endpoint | Description
 --- | --- | ---
-GET/POST | /test | Test if the server is alive and reachable.
-GET | /config | Get a list of configurations.
-GET | /scan | Get a list of sensors with their locations.
-GET | /read/all | Get a list of all sensor readings.
-GET | /read/max | Get a maximum sensor readings.
-GET | /read/last_hour | Get all reading from the last hour.
-GET | /read/last_hour/max | Get a maximum reading from the last hour.
-GET | /read/yesterday | Get all reading from yesterday.
-GET | /read/yesterday/max | Get a maximum reading from yesterday.
-GET | /read/<id:int> | Get all reading for a specific sensor.
-GET | /read/<id:int>/last_hour | Get all reading for a specific sensor from the last hour.
-GET | /read/<id:int>/yesterday | Get all reading for a specific sensor from yesterday.
-POST | /write | Publish a sensor reading to the system.
+GET/POST | `/test` | Test if the server is alive and reachable.
+GET | `/config` | Get a list of configurations.
+GET | `/scan` | Get a list of sensors with their locations.
+GET | `/read/all` | Get a list of all sensor readings.
+GET | `/read/max` | Get a maximum sensor readings.
+GET | `/read/last_hour` | Get all reading from the last hour.
+GET | `/read/last_hour/max` | Get a maximum reading from the last hour.
+GET | `/read/yesterday` | Get all reading from yesterday.
+GET | `/read/yesterday/max` | Get a maximum reading from yesterday.
+GET | `/read/<int:id>` | Get all reading for a specific sensor.
+GET | `/read/<int:id>/last_hour` | Get all reading for a specific sensor from the last hour.
+GET | `/read/<int:id>/yesterday` | Get all reading for a specific sensor from yesterday.
+POST | `/write` | Publish a sensor reading to the system.
 
 **Sample responses**
 
-```
+```sh
 /test
     {'status': 'ok', 'timestamp': 'Sat May 26 16:41:38 2018'}
 
@@ -103,10 +103,7 @@ POST | /write | Publish a sensor reading to the system.
       'timestamp': '2018-05-26 16:41:28'}]
 
 /read/last_hour/max
-    [{'data': {'humidity': {'unit': '%', 'value': 60.1},
-               'temperature': {'unit': 'C', 'value': 20.2}},
-      'id': 5,
-      'timestamp': '2018-05-26 16:41:28'}]
+    ditto
 
 /read/yesterday
     ditto
@@ -130,20 +127,61 @@ POST | /write | Publish a sensor reading to the system.
 ## Sensor Workshop
 
 Install git if you have not:
-```
+```sh
 sudo apt-get install git
 ```
 
-Clone the project and install dependencies:
-```
-git clone https://github.com/hoanhan101/pi-hub.git && cd pi-hub && ./install_requirements.sh
+Clone the project:
+```sh
+git clone https://github.com/hoanhan101/pi-hub.git
 ```
 
-Copy your program file into this folder:
+Copy your program file into pi-hub folder. For example, my program's name is `read_sensor.py`:
+```sh
+cp read_sensor.py pi-hub/read_sensor.py
 ```
-cp <your_file_name>.py pi-hub/<your_file_name>.py
-``
 
-Adapt the template and code in [sample_client.py](sample_client.py) to your main program.
+Change directory to pi-hub and install dependencies:
+```sh
+cd pi-hub && ./install_requirements.sh
+```
 
-After following these steps above successfully, you should be able to send data to the server.
+Adapt this code to your program:
+```python
+
+import time
+import helper # This helper library will help us push the sensor reading to the collection server.
+
+# Imagine your functions' definitions are here. Below is your main program.
+
+# It will look similar to this.
+
+# Define a variable name SENSOR_ID to save your sensor id. For example, my sensor id is 1. 
+SENSOR_ID = 1
+
+# Define your location, which is the Catlab machine number. For example, my Catlab machine is 2.
+LOCATION = 2
+
+# Define how much time do you want to wait between each send to the server.
+SLEEP_TIME = 15
+
+while True:
+    block = get_reading()
+    temp = convert_temp_reading(block[0], block[1], mode='celsius')
+    humidity = convert_humidity_reading(block[3], block[4])
+
+    # Publish the sensor reading to the server, providing sensor id and its location.
+    helper.post(SENSOR_ID, LOCATION, temp, humidity)
+    time.sleep(SLEEP_TIME)
+```
+
+After following these steps above, you should be able to send data to the server by executing:
+```sh
+./read_sensor.py
+```
+
+If you receive an output like this, it means that you have successfully pulish your reading to the
+server:
+```sh
+{'error': None, 'id': 1, 'timestamp': 'Sat May 26 16:41:39 2018'}
+```
