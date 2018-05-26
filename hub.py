@@ -4,7 +4,7 @@
     Date: 05/10/18
 """
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, abort, request
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_cors import CORS
@@ -160,12 +160,23 @@ def write():
 @app.route('/clean', methods=['GET'])
 def clean_up_database():
     """
-    Clean up database. For testing only.
+    Clean up database. Only allow localhost.
     """
-    sql.clear_table()
-    response = helper.use_test_scheme()
-    return jsonify(response)
+    remotes = ['172.17.0.1', '127.0.0.1']
+    if request.remote_addr in remotes:
+        response = {
+            'status': 'ok'
+        }
 
+        sql.clear_table()
+        return jsonify(response)
+    else:
+        response = {
+            'status': 'not allowed'
+        }
+
+        abort(403)
+        return jsonify(response)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
