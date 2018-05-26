@@ -6,7 +6,7 @@
 
 # URL = 'http://localhost:5000'
 URL = 'http://34.201.69.120:5000'
-# URL = 'http://54.172.51.227:5000'
+# URL = 'http://54.197.182.144:5000'
 
 # MySQL
 HOST = 'mysql1' # for Docker
