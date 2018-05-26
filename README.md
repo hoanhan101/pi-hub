@@ -163,8 +163,10 @@ SENSOR_ID = 1
 LOCATION = 2
 
 # Define how much time do you want to wait between each send to the server.
+# Any value from 15 to 30 seconds is good enough. Below will be too much overhead for the server.
 SLEEP_TIME = 15
 
+# Loop forever.
 while True:
     block = get_reading()
     temp = convert_temp_reading(block[0], block[1], mode='celsius')
@@ -172,6 +174,8 @@ while True:
 
     # Publish the sensor reading to the server, providing sensor id and its location.
     helper.post(SENSOR_ID, LOCATION, temp, humidity)
+
+    # Sleep for some time then repeat.
     time.sleep(SLEEP_TIME)
 ```
 
@@ -185,3 +189,5 @@ server:
 ```sh
 {'error': None, 'id': 1, 'timestamp': 'Sat May 26 16:41:39 2018'}
 ```
+
+Bravo!
