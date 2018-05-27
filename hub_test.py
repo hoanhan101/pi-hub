@@ -6,6 +6,8 @@
 
 import requests
 
+from time import ctime, time
+
 from pprint import pprint
 
 import config
@@ -24,7 +26,22 @@ def test_get(endpoint, url=config.URL):
     """
     r = requests.get('{}/{}'.format(url, endpoint))
     print('\033[92m/{}\t{}\033[0m'.format(endpoint, r.status_code))
-    pprint(r.json())
+
+    if r.status_code == 429:
+        response = {
+            'error': '429 Too Many Requests',
+            'timestamp': ctime(time())
+        }
+        pprint(response)
+    if r.status_code == 403:
+        response = {
+            'error': '403 Forbidden',
+            'timestamp': ctime(time())
+        }
+        pprint(response)
+    else:
+        pprint(r.json())
+
     return r.status_code
 
 if __name__ == '__main__':
@@ -43,8 +60,12 @@ if __name__ == '__main__':
     assert 200 == test_get('read/1/yesterday')
 
     # POST
-    assert 200 == helper.post(1, 2, 20.2, 60.6)
+    assert 200 == helper.post(1, 'A1', 20.2, 60.6)
+    assert 200 == helper.post(1, 'A1000000000000', 20.2, 60.6)
+    assert 200 == helper.post(1.0, 'A10', 20.2, 60.6)
+    assert 200 == helper.post(1, 'A10', 20, 60.6)
+    assert 200 == helper.post(1, 'A10', 20.2, 60)
 
     # Clean up
-    assert 200 == test_get('clean')
+    assert 403 == test_get('clean')
     assert 200 == test_get('read/all')
