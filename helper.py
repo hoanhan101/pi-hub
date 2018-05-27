@@ -167,6 +167,7 @@ def post(sensor_id, location, temp, humd):
     
     # Send a request
     r = requests.post('{}/{}'.format(config.URL, 'write'), json=payload)
+    print('\033[92m/{}\t{}\033[0m'.format('write', r.status_code))
 
     # Print out returned message.
     if r.status_code == 429:

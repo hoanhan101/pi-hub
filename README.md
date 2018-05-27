@@ -159,8 +159,8 @@ import helper # This helper library will help us push the sensor reading to the 
 # Define a variable name SENSOR_ID to save your sensor id. For example, my sensor id is 1. 
 SENSOR_ID = 1
 
-# Define your location, which is the Catlab machine number. For example, my Catlab machine is 2.
-LOCATION = 2
+# Define your location, which is assigned by the visualization team. For example, my location is A10.
+LOCATION = 'A10'
 
 # Define how much time do you want to wait between each send to the server.
 # Any value from 15 to 30 seconds is good enough. Below will be too much overhead for the server.

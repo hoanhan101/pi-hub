@@ -26,8 +26,8 @@ def get_sample_reading():
 
 if __name__ == '__main__':
     # Configurations
-    SENSOR_ID = 5
-    LOCATION = 2
+    SENSOR_ID = 10
+    LOCATION = 'A10'
     SLEEP_TIME = 5
 
     # Loop forever.
