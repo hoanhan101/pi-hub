@@ -32,7 +32,7 @@ def insert_reading(id, loc, temp, d, hum):
 
     Params:
         id <int>: Sensor ID
-        loc <int>: Sensor's location
+        loc <str>: Sensor's location
         temp <float>: Temperature value
         d <str>: Temperature degree
         hum <float>: Temperature value

@@ -193,8 +193,8 @@ def validate_post_data(data):
     if not isinstance(id, int):
         return 'ID must be an integer'
 
-    if not isinstance(location, int):
-        return 'Location must be an integer'
+    if not isinstance(location, str):
+        return 'Location must be a string'
 
     if not isinstance(temp, float):
         return 'Temperature value must be a float'
