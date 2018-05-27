@@ -142,7 +142,7 @@ def post(sensor_id, location, temp, humd):
 
     Params:
         sensor_id <int>: Sensor ID
-        location <int>: Location number
+        location <str>: Location coordinate
         temp <float>: Temperature value
         humd <float>: Humidity value
 
@@ -169,7 +169,22 @@ def post(sensor_id, location, temp, humd):
     r = requests.post('{}/{}'.format(config.URL, 'write'), json=payload)
 
     # Print out returned message.
-    pprint(r.json())
+    if r.status_code == 429:
+        response = {
+            'id': sensor_id,
+            'error': '429 Too Many Requests',
+            'timestamp': ctime(time())
+        }
+        pprint(response)
+    elif r.status_code == 500:
+        response = {
+            'id': sensor_id,
+            'error': '500 Internal Server Error',
+            'timestamp': ctime(time())
+        }
+        pprint(response)
+    else:
+        pprint(r.json())
 
     return r.status_code
 
@@ -195,6 +210,9 @@ def validate_post_data(data):
 
     if not isinstance(location, str):
         return 'Location must be a string'
+
+    if len(location) > 3:
+        return 'Location must have length less or equal than 3'
 
     if not isinstance(temp, float):
         return 'Temperature value must be a float'
